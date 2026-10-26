@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0b0716">
+<title>Hub de Mini-games · Juventude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main id="app">
+
+  <!-- 1. Loading -->
+  <section class="screen active" id="screen-loading">
+    <div class="cross" aria-hidden="true"><i></i><i></i></div>
+    <p id="load-text">Carregando… 0%</p>
+    <div class="bar"><span id="load-bar"></span></div>
+    <button class="btn green" id="btn-enter" data-press="enter" hidden>Toque para entrar</button>
+  </section>
+
+  <!-- 2. Identificação -->
+  <section class="screen" id="screen-name">
+    <h1>Qual é o seu nome de guerreiro?</h1>
+    <input id="nick-input" type="text" maxlength="16" autocomplete="off" placeholder="Seu nickname">
+    <p class="error" id="nick-error" role="alert"></p>
+    <button class="btn purple" data-press="saveName">Continuar</button>
+  </section>
+
+  <!-- 3. Personagem -->
+  <section class="screen" id="screen-character">
+    <h1>Escolha seu personagem</h1>
+    <div id="carousel" class="carousel"></div>
+    <button class="btn green" data-press="confirmChar">Confirmar</button>
+  </section>
+
+  <!-- 4. Menu -->
+  <section class="screen" id="screen-menu">
+    <header class="profile">
+      <span id="menu-avatar" class="avatar"></span>
+      <strong id="menu-nick"></strong>
+      <button class="icon-btn" data-press="changeAvatar" aria-label="Trocar personagem">✎</button>
+      <button class="icon-btn" id="btn-mute" data-press="mute" aria-label="Som">🔊</button>
+    </header>
+    <button class="btn purple" data-press="play" data-game="davi">🪨 A Funda de Davi</button>
+    <button class="btn blue" data-press="play" data-game="sansao">🏛️ A Força de Sansão</button>
+    <button class="btn green" data-press="ranking">🏆 Ranking Geral</button>
+  </section>
+
+  <!-- Ranking -->
+  <section class="screen" id="screen-ranking">
+    <h1>Ranking</h1>
+    <div class="tabs">
+      <button class="tab" data-press="tab" data-game="davi">Davi</button>
+      <button class="tab" data-press="tab" data-game="sansao">Sansão</button>
+    </div>
+    <ol id="rank-list" class="rank"></ol>
+    <button class="btn blue" data-press="menu">Voltar</button>
+  </section>
+
+  <!-- Jogo (compartilhado pelos mini-games) -->
+  <section class="screen" id="screen-game">
+    <header class="hud">
+      <button class="icon-btn" data-press="exit" aria-label="Sair do jogo">✕</button>
+      <span id="hud-left"></span>
+      <span id="hud-right"></span>
+    </header>
+    <canvas id="game-canvas"></canvas>
+    <div id="force" hidden><span id="force-fill"></span></div>
+    <div id="gameover" hidden>
+      <h2>Fim de jogo</h2>
+      <p class="big" id="final-score">0</p>
+      <p id="final-detail"></p>
+      <p id="save-status"></p>
+      <button class="btn green" data-press="again">Jogar de novo</button>
+      <button class="btn blue" data-press="exit">Menu</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="main.js"></script>
+<script src="game_davi.js"></script>
+<script src="game_sansao.js"></script>
+</body>
+</html>
