@@ -1,5 +1,13 @@
-intro.mp4  -> vídeo da tela de loading (H.264/MP4, de preferência vertical 9:16, abaixo de 10 MB; toca mudo e sem loop).
-logo.png   -> logo do PG Jovem com fundo transparente.
-characters/-> crie esta pasta para personagens personalizados:
-              nome.png (retrato QUADRADO, ~256x256) e, opcional, nome-corpo.png (corpo inteiro, fundo transparente).
-              Depois inclua uma linha no elenco (AVATARS) do main.js - o exemplo está comentado ali.
+intro.mp4   -> vídeo da tela de loading (H.264/MP4, de preferência vertical 9:16, abaixo de 10 MB; toca mudo e sem loop).
+logo.png    -> logo do PG Jovem com fundo transparente.
+
+characters/ -> (crie a pasta) arte de personagens personalizados:
+   nome.png        retrato QUADRADO (~256x256)  -> avatar no menu/ranking e na grade de seleção
+   nome-corpo.png  corpo inteiro, fundo transparente -> palco da seleção e dentro dos jogos (ganha pulo, balanço e inclinação por código)
+   Depois ajuste a linha da pessoa no elenco (AVATARS) do main.js, incluindo img: 'assets/characters/nome.png' e art: 'assets/characters/nome-corpo.png'.
+
+   Sem imagens, o personagem é desenhado em código a partir do "look" (pele, cabelo, barba, óculos, roupa) na mesma linha do elenco.
+   Douglas e Thais estão com visual PROVISÓRIO: ajuste o look quando enviar as fotos.
+
+music/      -> (opcional) músicas próprias. Em main.js, CONFIG.AUDIO.music = { menu: 'assets/music/menu.mp3', corrida: '...', muros: '...', pesca: '...', davi: '...', sansao: '...' }
+              Sem arquivos, cada jogo usa a trilha sintetizada do seu tema.

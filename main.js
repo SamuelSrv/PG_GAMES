@@ -8,24 +8,33 @@ const CONFIG = {
   SUPABASE_ANON_KEY: 'sb_publishable_VRvE2fdP-t1VI4uzfZB-Mw_svTCuGGW',
   MIN_LOAD_MS: 1500,
   IMAGES: [],                       // URLs de imagens para pré-carregar
-  AUDIO: { bgm: '', click: '', hit: '', miss: '', tap: '', win: '' } // URLs opcionais; vazio = som sintetizado
+  AUDIO: { music: {}, click: '', hit: '', miss: '', tap: '', win: '' } // URLs opcionais (ex.: music: { menu: 'assets/music/menu.mp3', davi: '...' }); vazio = som sintetizado
 };
-/* Elenco da seleção de personagens. Para adicionar um personalizado (foto/arte do PG), inclua uma linha com o próximo id:
-   { id: 12, name: 'Nome', role: 'Frase curta', stats: [80, 80, 80], img: 'assets/characters/nome.png', art: 'assets/characters/nome-corpo.png' }
-   img = retrato quadrado (avatar); art = corpo inteiro para o palco (opcional). */
+/* Elenco da seleção (a ordem aqui é a ordem na tela). Para adicionar alguém, inclua uma linha com um id novo e único:
+   { id: 18, name: 'Nome', role: 'Frase curta', bio: 'Biografia resumida.', stats: [80, 80, 80],
+     look: { skin: '#d9a077', hair: '#3a2616', head: 'hair', tunic: '#2f6fb0' },      // visual desenhado em código
+     img: 'assets/characters/nome.png', art: 'assets/characters/nome-corpo.png' }       // opcional: retrato quadrado + corpo inteiro (PNG) */
 const AVATARS = [
-  { id: 0,  key: 'davi',    name: 'Davi',    role: 'O pastor que virou rei',     stats: [90, 95, 70] },
-  { id: 1,  key: 'ester',   name: 'Ester',   role: 'Coragem de rainha',          stats: [85, 100, 80] },
-  { id: 2,  key: 'daniel',  name: 'Daniel',  role: 'Fiel na cova dos leões',     stats: [100, 80, 95] },
-  { id: 3,  key: 'moises',  name: 'Moisés',  role: 'Libertador do povo',         stats: [95, 85, 90] },
-  { id: 4,  key: 'debora',  name: 'Débora',  role: 'Juíza e profetisa',          stats: [90, 90, 100] },
-  { id: 5,  key: 'jose',    name: 'José',    role: 'Do poço ao palácio',         stats: [95, 70, 100] },
-  { id: 6,  key: 'rute',    name: 'Rute',    role: 'Lealdade que não solta',     stats: [100, 75, 85] },
-  { id: 7,  key: 'josue',   name: 'Josué',   role: 'Sê forte e corajoso',        stats: [90, 100, 75] },
-  { id: 8,  key: 'gideao',  name: 'Gideão',  role: '300 homens e uma trombeta',  stats: [80, 90, 85] },
-  { id: 9,  key: 'paulo',   name: 'Paulo',   role: 'Corri a carreira',           stats: [100, 95, 90] },
-  { id: 10, key: 'miria',   name: 'Miriã',   role: 'Louvor depois do mar',       stats: [90, 80, 85] },
-  { id: 11, key: 'salomao', name: 'Salomão', role: 'O rei mais sábio',           stats: [85, 70, 100] }
+  { id: 12, name: 'Douglas', role: 'Líder de jovens', bio: 'Líder do PG Jovem. Aquele que manda no PG (A gente sabe que é a Thais).', stats: [90, 90, 90],
+    look: { skin: '#d9a077', hair: '#3a2616', head: 'hair', tunic: '#2f6fb0', sash: '#ff2d95' } },
+  { id: 13, name: 'Thais', role: 'Líder de jovens', bio: 'Líder do PG Jovem. Mãe do Thiago.', stats: [90, 90, 90],
+    look: { skin: '#d9a077', hair: '#4a2a18', head: 'long', tunic: '#da1d9b', sash: '#ffc94d' } },
+  { id: 0,  key: 'davi',    name: 'Davi',    role: 'O pastor que virou rei',     bio: 'Pastor de ovelhas que enfrentou Golias com uma funda e fé. Foi rei e escreveu muitos salmos.', stats: [90, 95, 70] },
+  { id: 1,  key: 'ester',   name: 'Ester',   role: 'Coragem de rainha',          bio: 'Jovem judia que virou rainha da Pérsia e arriscou a própria vida para salvar o seu povo.', stats: [85, 100, 80] },
+  { id: 2,  key: 'daniel',  name: 'Daniel',  role: 'Fiel na cova dos leões',     bio: 'Levado cativo para a Babilônia, manteve-se fiel a Deus até na cova dos leões.', stats: [100, 80, 95] },
+  { id: 3,  key: 'moises',  name: 'Moisés',  role: 'Libertador do povo',         bio: 'Tirou o povo de Israel do Egito e recebeu os Dez Mandamentos no monte Sinai.', stats: [95, 85, 90] },
+  { id: 4,  key: 'debora',  name: 'Débora',  role: 'Juíza e profetisa',          bio: 'Juíza de Israel que liderou o povo com sabedoria e coragem, ao lado de Baraque.', stats: [90, 90, 100] },
+  { id: 5,  key: 'jose',    name: 'José',    role: 'Do poço ao palácio',         bio: 'Vendido pelos irmãos, chegou a governador do Egito e escolheu perdoar a todos.', stats: [95, 70, 100] },
+  { id: 6,  key: 'rute',    name: 'Rute',    role: 'Lealdade que não solta',     bio: 'Estrangeira que ficou ao lado da sogra Noemi e entrou na família do rei Davi.', stats: [100, 75, 85] },
+  { id: 7,  key: 'josue',   name: 'Josué',   role: 'Sê forte e corajoso',        bio: 'Sucessor de Moisés. Conduziu Israel à terra prometida e viu as muralhas de Jericó caírem.', stats: [90, 100, 75] },
+  { id: 8,  key: 'gideao',  name: 'Gideão',  role: '300 homens e uma trombeta',  bio: 'Com apenas 300 homens, trombetas e tochas, venceu o enorme exército de Midiã.', stats: [80, 90, 85] },
+  { id: 9,  key: 'paulo',   name: 'Paulo',   role: 'Corri a carreira',           bio: 'Perseguia a Igreja, até encontrar Jesus. Depois levou o evangelho ao mundo e escreveu várias cartas.', stats: [100, 95, 90] },
+  { id: 10, key: 'miria',   name: 'Miriã',   role: 'Louvor depois do mar',       bio: 'Irmã de Moisés. Louvou a Deus com pandeiro depois de atravessar o mar Vermelho.', stats: [90, 80, 85] },
+  { id: 11, key: 'salomao', name: 'Salomão', role: 'O rei mais sábio',           bio: 'Filho de Davi. Pediu sabedoria a Deus, tornou-se o rei mais sábio e construiu o templo.', stats: [85, 70, 100] },
+  { id: 14, key: 'elias',   name: 'Elias',   role: 'Fogo no Carmelo',            bio: 'Profeta que desafiou os profetas de Baal no monte Carmelo e correu diante da carruagem do rei.', stats: [90, 100, 80] },
+  { id: 15, key: 'neemias', name: 'Neemias', role: 'Construtor de muros',        bio: 'Copeiro do rei que voltou a Jerusalém e reconstruiu a muralha em 52 dias.', stats: [90, 85, 95] },
+  { id: 16, key: 'pedro',   name: 'Pedro',   role: 'Pescador de homens',         bio: 'Pescador chamado por Jesus para pescar pessoas. Tornou-se líder da Igreja nascente.', stats: [80, 95, 75] },
+  { id: 17, key: 'sansao',  name: 'Sansão',  role: 'Força de gigante',           bio: 'Juiz de Israel com força extraordinária. No fim, derrubou o templo de Dagom.', stats: [70, 100, 60] }
 ];
 const GAMES = { corrida: 'Corrida da Fé', muros: 'Muros de Neemias', pesca: 'Pescadores de Homens', davi: 'Funda de Davi', sansao: 'Força de Sansão' };
 const VERSES = [
@@ -62,6 +71,16 @@ Hub.fit = cv => { // ajusta o canvas ao tamanho CSS (retina)
   return { w: r.width, h: r.height };
 };
 
+/* ===== Trilhas (sintetizadas): cada jogo tem a sua, no clima do tema ===== */
+const TRACKS = {
+  menu:    { bpm: 84,  root: 261.6, wave: 'triangle', chords: [[0, 4, 7], [7, 11, 14], [9, 12, 16], [5, 9, 12]], arp: 2, bass: [0, 8], kick: [], hat: [], vol: .07 },                       // esperança / louvor
+  corrida: { bpm: 150, root: 220,   wave: 'square',   chords: [[0, 3, 7], [0, 3, 7], [-4, 0, 3], [-2, 2, 5]], arp: 1, bass: [0, 2, 4, 6, 8, 10, 12, 14], kick: [0, 4, 8, 12], hat: [2, 6, 10, 14], vol: .045, up: 12 }, // corrida
+  muros:   { bpm: 100, root: 146.8, wave: 'triangle', chords: [[0, 7, 12], [0, 7, 12], [5, 12, 17], [7, 14, 19]], arp: 4, bass: [0, 4, 8, 12], kick: [0, 8], hat: [4, 12], vol: .07 },       // marcha de construção
+  pesca:   { bpm: 78,  root: 196,   wave: 'sine',     chords: [[0, 4, 7, 11], [5, 9, 12, 16], [2, 5, 9, 12], [7, 11, 14, 17]], arp: 2, bass: [0], kick: [], hat: [], vol: .09 },       // ondas calmas
+  davi:    { bpm: 112, root: 164.8, wave: 'sawtooth', chords: [[0, 3, 7], [0, 3, 7], [-2, 2, 5], [-4, 0, 3]], arp: 4, bass: [0, 3, 6, 8, 11, 14], kick: [0, 6, 8, 14], hat: [4, 12], vol: .04 }, // batalha
+  sansao:  { bpm: 88,  root: 110,   wave: 'sawtooth', chords: [[0, 7, 12], [-2, 5, 10], [-4, 3, 8], [-5, 2, 7]], arp: 8, bass: [0, 6, 8, 14], kick: [0, 8], hat: [], vol: .05 }          // épico e pesado
+};
+
 /* ===== AudioManager ===== */
 class AudioManager {
   constructor() { this.ctx = null; this.muted = store.get('hub_muted') === '1'; this.timer = null; this.step = 0; this.bgmEl = null; }
@@ -91,24 +110,39 @@ class AudioManager {
       hit:   () => { this.tone(180, .25, { type: 'sawtooth', vol: .25, slide: -120 }); this.tone(880, .12, { type: 'square', vol: .1, delay: .02 }); },
       miss:  () => this.tone(200, .35, { type: 'sawtooth', vol: .2, slide: -150 }),
       tap:   () => this.tone(120, .1, { type: 'square', vol: .18, slide: -60 }),
+      whoosh: () => { this.noise(.25, .12, 1500); this.tone(500, .2, { vol: .06, slide: -300 }); },
+      splash: () => { this.noise(.3, .16, 2500); this.tone(300, .15, { vol: .05, slide: 200 }); },
+      thud:   () => { this.tone(90, .22, { vol: .35, slide: -50 }); this.noise(.08, .1, 800); },
       win:   () => [523, 659, 784, 1047].forEach((f, i) => this.tone(f, .2, { type: 'triangle', vol: .15, delay: i * .1 }))
     };
     (p[name] || (() => {}))();
   }
-  playBGM() {
-    if (CONFIG.AUDIO.bgm) {
-      if (!this.bgmEl) { this.bgmEl = new Audio(CONFIG.AUDIO.bgm); this.bgmEl.loop = true; this.bgmEl.volume = .4; }
-      this.bgmEl.muted = this.muted; this.bgmEl.play().catch(() => {}); return;
-    }
-    if (this.timer || !this.ctx) return;
-    const n = [220, 261.6, 329.6, 392, 329.6, 261.6, 293.7, 349.2];
+  noise(d, vol = .15, hp = 4000) {
+    if (!this.ctx) return;
+    const n = Math.floor(this.ctx.sampleRate * d), buf = this.ctx.createBuffer(1, n, this.ctx.sampleRate), ch = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) ch[i] = (Math.random() * 2 - 1) * (1 - i / n);
+    const s = this.ctx.createBufferSource(), f = this.ctx.createBiquadFilter(), g = this.ctx.createGain();
+    f.type = 'highpass'; f.frequency.value = hp; g.gain.value = vol; s.buffer = buf; s.connect(f).connect(g).connect(this.master); s.start();
+  }
+  playBGM() { this.playTrack('menu'); }
+  playTrack(name) {   // troca a música (cada jogo tem a sua). Para usar arquivos: CONFIG.AUDIO.music[nome] = 'assets/music/x.mp3'
+    if (this.trackName === name && (this.timer || this.bgmEl)) return;
+    this.stopTrack(); this.trackName = name;
+    const url = CONFIG.AUDIO.music && CONFIG.AUDIO.music[name];
+    if (url) { this.bgmEl = new Audio(url); this.bgmEl.loop = true; this.bgmEl.volume = .5; this.bgmEl.muted = this.muted; this.bgmEl.play().catch(() => {}); return; }
+    if (!this.ctx) return;
+    const T = TRACKS[name] || TRACKS.menu, ms = 60000 / T.bpm / 4, sd = ms / 1000; let step = 0;
     this.timer = setInterval(() => {
       if (this.muted) return;
-      this.tone(n[this.step % n.length], .5, { type: 'triangle', vol: .06 });
-      if (this.step % 4 === 0) this.tone(n[0] / 2, 1.8, { vol: .08 });
-      this.step++;
-    }, 450);
+      const k = step % 16, chord = T.chords[Math.floor(step / 16) % T.chords.length], f = n => T.root * Math.pow(2, n / 12);
+      if (k % T.arp === 0) { const i = (k / T.arp) | 0, n = chord[i % chord.length] + (Math.floor(i / chord.length) % 2) * 12 + (T.up || 0); this.tone(f(n), sd * T.arp * 1.6, { type: T.wave, vol: T.vol }); }
+      if (T.bass.includes(k)) this.tone(f(chord[0]) / 2, sd * 3, { type: 'triangle', vol: T.vol * 2.2 });
+      if (T.kick.includes(k)) this.tone(130, .18, { vol: .3, slide: -95 });
+      if (T.hat.includes(k)) this.noise(.05, .06);
+      step++;
+    }, ms);
   }
+  stopTrack() { clearInterval(this.timer); this.timer = null; if (this.bgmEl) { this.bgmEl.pause(); this.bgmEl = null; } this.trackName = ''; }
   toggleMute() {
     this.muted = !this.muted; store.set('hub_muted', this.muted ? '1' : '0');
     if (this.master) this.master.gain.value = this.muted ? 0 : 1;
@@ -196,7 +230,7 @@ const go = id => {
   if (id === 'menu') {
     $('#menu-avatar').src = avatarSrc(Math.max(0, Hub.state.characterId));
     $('#menu-nick').textContent = Hub.state.nickname; $('#btn-mute').classList.toggle('off', audio.muted);
-    $('#verse').textContent = VERSES[Math.floor(Math.random() * VERSES.length)];
+    $('#verse').textContent = VERSES[Math.floor(Math.random() * VERSES.length)]; buildMenuArt();
   }
   if (id === 'name') $('#nick-input').value = Hub.state.nickname;
   if (id === 'character') enterSelect();
@@ -221,7 +255,7 @@ function buildSelect() {
 function pick(id) {
   const a = findChar(id); Hub.state.characterId = a.id; flexT = 0.7;
   $$('.tile').forEach(t => t.classList.toggle('sel', Number(t.dataset.id) === a.id));
-  $('#sel-name').textContent = a.name; $('#sel-role').textContent = a.role;
+  $('#sel-name').textContent = a.name; $('#sel-role').textContent = a.role; $('#sel-bio').textContent = a.bio || '';
   $$('#stats em').forEach((e, i) => { e.style.width = a.stats[i] + '%'; });
 }
 function enterSelect() {
@@ -241,7 +275,7 @@ function previewLoop(now) {
   c.ellipse(W / 2, H * 0.93, W * 0.28 + Math.sin(t * 3) * 4, 12, 0, 0, 7); c.stroke(); c.shadowBlur = 0;                              // anel no chão
   const bob = Math.sin(t * 2) * 3, im = artImgs[a.id];
   if (im && im.complete && im.naturalWidth) { const h = H * 0.82, w = h * im.naturalWidth / im.naturalHeight; c.drawImage(im, W / 2 - w / 2, H * 0.93 + bob - h, w, h); }
-  else Art.figure(c, a.key || 'davi', { x: W / 2, y: H * 0.93 + bob, h: H * 0.8, pose: flexT > 0 ? 'up' : 'stand' });
+  else Art.figure(c, a.key, { ...a.look, x: W / 2, y: H * 0.93 + bob, h: H * 0.8, pose: flexT > 0 ? 'up' : 'stand' });
   selRaf = requestAnimationFrame(previewLoop);
 }
 
@@ -334,7 +368,7 @@ window.addEventListener('resize', () => active && active.resize());
 function startGame(id) {
   if (!Hub.games[id]) return;
   if (Hub.current && Hub.games[Hub.current]) Hub.games[Hub.current].stop();
-  Hub.current = id; go('game');
+  Hub.current = id; go('game'); audio.playTrack(id);
   $('#gameover').hidden = true; $('#force').hidden = id !== 'sansao';
   Hub.games[id].start();
 }
@@ -371,7 +405,7 @@ const actions = {
   mute: b => { b.classList.toggle('off', audio.toggleMute()); },
   async logout() { await signOut(); go('auth'); },
   again: () => startGame(Hub.current),
-  exit: () => { leaveGame(); go('menu'); }
+  exit: () => { leaveGame(); audio.playTrack('menu'); go('menu'); }
 };
 function bindButtons() {
   $$('[data-press]').forEach(b => {
@@ -384,8 +418,10 @@ function bindButtons() {
 
 /* ===== Arte, vídeo de abertura e miniaturas ===== */
 const avatarCache = {};
-const avatarSrc = id => { const a = findChar(id); return a.img || avatarCache[a.id] || (avatarCache[a.id] = Art.portrait(a.key || 'davi', 96)); };
-function buildMenuArt() { $$('.card[data-game]').forEach(c => { $('.thumb', c).src = Art.thumb(c.dataset.game, 320, 240); }); }
+const avatarSrc = id => { const a = findChar(id); return a.img || avatarCache[a.id] || (avatarCache[a.id] = Art.portrait(a.key, 96, a.look)); };
+const whoAmI = () => { const a = findChar(Hub.state.characterId), im = artImgs[a.id]; return { key: a.key, look: a.look, img: im && im.complete && im.naturalWidth ? im : null }; };
+Hub.player = (c, o) => { const w = whoAmI(); if (w.img) Art.sprite(c, w.img, o); else Art.figure(c, w.key, { ...w.look, ...o }); };   // personagem escolhido, usado nos jogos
+function buildMenuArt() { const w = whoAmI(); $$('.card[data-game]').forEach(c => { $('.thumb', c).src = Art.thumb(c.dataset.game, 320, 240, w); }); }
 let introEnded = true, loaded = false;
 function refreshEnter() { if (!loaded) return; const b = $('#btn-enter'); b.hidden = false; b.textContent = introEnded ? 'Entrar' : 'Pular e entrar'; }
 function setupIntro() { // vídeo assets/intro.mp4 (mudo, sem loop); sem o arquivo, mostra o logo
