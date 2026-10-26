@@ -1,0 +1,5 @@
+intro.mp4  -> vídeo da tela de loading (H.264/MP4, de preferência vertical 9:16, abaixo de 10 MB; toca mudo e sem loop).
+logo.png   -> logo do PG Jovem com fundo transparente.
+characters/-> crie esta pasta para personagens personalizados:
+              nome.png (retrato QUADRADO, ~256x256) e, opcional, nome-corpo.png (corpo inteiro, fundo transparente).
+              Depois inclua uma linha no elenco (AVATARS) do main.js - o exemplo está comentado ali.

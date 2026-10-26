@@ -3,67 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0b0716">
-<title>Hub de Mini-games · Juventude</title>
+<meta name="theme-color" content="#050507">
+<title>PG Jovem · Mini-games</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Sora:wght@500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-crown" viewBox="-42 -36 84 52"><path d="M-30 10L-34 -18L-14 -2L0 -24L14 -2L34 -18L30 10Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><circle cx="-34" cy="-22" r="4.5" fill="currentColor"/><circle cx="0" cy="-28" r="4.5" fill="currentColor"/><circle cx="34" cy="-22" r="4.5" fill="currentColor"/></symbol>
+  <symbol id="i-exit" viewBox="0 0 24 24"><path d="M10 4H5v16h5M14 8l5 4-5 4M19 12H9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4 20c1-4 4-6 8-6s7 2 8 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+</svg>
 <main id="app">
+  <div id="bg" aria-hidden="true"></div>
 
-  <!-- 1. Loading -->
+  <!-- 1. Loading com o vídeo do PG Jovem (assets/intro.mp4) -->
   <section class="screen active" id="screen-loading">
-    <div class="cross" aria-hidden="true"><i></i><i></i></div>
-    <p id="load-text">Carregando… 0%</p>
-    <div class="bar"><span id="load-bar"></span></div>
-    <button class="btn green" id="btn-enter" data-press="enter" hidden>Toque para entrar</button>
+    <video id="intro" muted playsinline autoplay preload="auto"><source src="assets/intro.mp4" type="video/mp4"></video>
+    <div class="load-ui">
+      <img class="logo" src="assets/logo.png" alt="PG Jovem desde 2018">
+      <div class="bar"><span id="load-bar"></span></div>
+      <p id="load-text">Carregando… 0%</p>
+      <button class="btn" id="btn-enter" data-press="enter" hidden>Entrar</button>
+    </div>
   </section>
 
-  <!-- 2. Identificação -->
+  <!-- 2. Conta: entrar / criar -->
+  <section class="screen" id="screen-auth">
+    <img class="logo-sm" src="assets/logo.png" alt="PG Jovem">
+    <div class="tabs">
+      <button class="tab on" data-press="authTab" data-mode="login">Entrar</button>
+      <button class="tab" data-press="authTab" data-mode="signup">Criar conta</button>
+    </div>
+    <form id="auth-form" class="form" novalidate>
+      <input id="auth-email" type="email" autocomplete="email" placeholder="E-mail">
+      <input id="auth-nick" type="text" maxlength="16" autocomplete="nickname" placeholder="Nickname (2 a 16 letras)" hidden>
+      <input id="auth-pass" type="password" minlength="6" autocomplete="current-password" placeholder="Senha (mín. 6 caracteres)">
+      <p class="error" id="auth-msg" role="alert"></p>
+      <button class="btn" id="auth-submit" type="submit">Entrar</button>
+    </form>
+    <button class="link" data-press="guest">Jogar sem conta (só neste aparelho)</button>
+  </section>
+
+  <!-- Modo visitante -->
   <section class="screen" id="screen-name">
     <h1>Qual é o seu nome de guerreiro?</h1>
     <input id="nick-input" type="text" maxlength="16" autocomplete="off" placeholder="Seu nickname">
     <p class="error" id="nick-error" role="alert"></p>
-    <button class="btn purple" data-press="saveName">Continuar</button>
+    <button class="btn" data-press="saveName">Continuar</button>
+    <button class="link" data-press="toAuth">Prefiro criar uma conta</button>
   </section>
 
   <!-- 3. Personagem -->
   <section class="screen" id="screen-character">
     <h1>Escolha seu personagem</h1>
-    <div id="carousel" class="carousel"></div>
-    <button class="btn green" data-press="confirmChar">Confirmar</button>
+    <div class="stage">
+      <canvas id="select-canvas"></canvas>
+      <div class="nameplate"><strong id="sel-name"></strong><small id="sel-role"></small></div>
+    </div>
+    <div id="stats" class="stats"></div>
+    <div id="roster" class="roster"></div>
+    <button class="btn" data-press="confirmChar">Escolher</button>
   </section>
 
   <!-- 4. Menu -->
   <section class="screen" id="screen-menu">
+    <img class="logo-sm" src="assets/logo.png" alt="PG Jovem desde 2018">
     <header class="profile">
-      <span id="menu-avatar" class="avatar"></span>
-      <strong id="menu-nick"></strong>
-      <button class="icon-btn" data-press="changeAvatar" aria-label="Trocar personagem">✎</button>
-      <button class="icon-btn" id="btn-mute" data-press="mute" aria-label="Som">🔊</button>
+      <img id="menu-avatar" class="avatar" alt="">
+      <div class="who"><small>Paz do Senhor,</small><strong id="menu-nick"></strong></div>
+      <button class="icon-btn" data-press="changeAvatar" aria-label="Trocar personagem"><svg><use href="#i-user"/></svg></button>
+      <button class="icon-btn" id="btn-mute" data-press="mute" aria-label="Som"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="w" d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+      <button class="icon-btn" data-press="logout" aria-label="Sair da conta"><svg><use href="#i-exit"/></svg></button>
     </header>
-    <button class="btn purple" data-press="play" data-game="davi">🪨 A Funda de Davi</button>
-    <button class="btn blue" data-press="play" data-game="sansao">🏛️ A Força de Sansão</button>
-    <button class="btn green" data-press="ranking">🏆 Ranking Geral</button>
+    <p id="verse" class="verse"></p>
+    <div class="grid">
+      <button class="card" style="--i:0" data-press="play" data-game="corrida"><img class="thumb" alt=""><span class="t">Corrida da Fé</span><small>Elias · 1 Rs 18</small></button>
+      <button class="card" style="--i:1" data-press="play" data-game="muros"><img class="thumb" alt=""><span class="t">Muros de Neemias</span><small>Neemias · Ne 2</small></button>
+      <button class="card" style="--i:2" data-press="play" data-game="pesca"><img class="thumb" alt=""><span class="t">Pescadores de Homens</span><small>Pedro · Mt 4</small></button>
+      <button class="card" style="--i:3" data-press="play" data-game="davi"><img class="thumb" alt=""><span class="t">Funda de Davi</span><small>Davi · 1 Sm 17</small></button>
+      <button class="card" style="--i:4" data-press="play" data-game="sansao"><img class="thumb" alt=""><span class="t">Força de Sansão</span><small>Sansão · Jz 16</small></button>
+      <button class="card wide" style="--i:5" data-press="ranking"><svg class="crown"><use href="#i-crown"/></svg><span><span class="t">Ranking</span><small>Os melhores do Reino</small></span></button>
+    </div>
   </section>
 
   <!-- Ranking -->
   <section class="screen" id="screen-ranking">
     <h1>Ranking</h1>
-    <div class="tabs">
+    <div class="tabs scroll" id="rank-tabs">
+      <button class="tab" data-press="tab" data-game="corrida">Corrida</button>
+      <button class="tab" data-press="tab" data-game="muros">Muros</button>
+      <button class="tab" data-press="tab" data-game="pesca">Pesca</button>
       <button class="tab" data-press="tab" data-game="davi">Davi</button>
       <button class="tab" data-press="tab" data-game="sansao">Sansão</button>
     </div>
+    <h2 id="rank-title"></h2>
     <ol id="rank-list" class="rank"></ol>
-    <button class="btn blue" data-press="menu">Voltar</button>
+    <button class="btn ghost" data-press="menu">Voltar</button>
   </section>
 
-  <!-- Jogo (compartilhado pelos mini-games) -->
+  <!-- Jogo (compartilhado pelos 5 mini-games) -->
   <section class="screen" id="screen-game">
     <header class="hud">
-      <button class="icon-btn" data-press="exit" aria-label="Sair do jogo">✕</button>
+      <button class="icon-btn" data-press="exit" aria-label="Voltar ao menu">←</button>
       <span id="hud-left"></span>
       <span id="hud-right"></span>
     </header>
@@ -73,16 +117,20 @@
       <h2>Fim de jogo</h2>
       <p class="big" id="final-score">0</p>
       <p id="final-detail"></p>
+      <p id="final-verse" class="final-verse"></p>
       <p id="save-status"></p>
-      <button class="btn green" data-press="again">Jogar de novo</button>
-      <button class="btn blue" data-press="exit">Menu</button>
+      <button class="btn" data-press="again">Jogar de novo</button>
+      <button class="btn ghost" data-press="exit">Menu</button>
     </div>
   </section>
-
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="art.js"></script>
 <script src="main.js"></script>
+<script src="game_corrida.js"></script>
+<script src="game_muros.js"></script>
+<script src="game_pesca.js"></script>
 <script src="game_davi.js"></script>
 <script src="game_sansao.js"></script>
 </body>
