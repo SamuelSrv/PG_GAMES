@@ -4,8 +4,8 @@
 
 /* ===== Configuração (edite aqui) ===== */
 const CONFIG = {
-  SUPABASE_URL: 'https://SEU-PROJETO.supabase.co',
-  SUPABASE_ANON_KEY: 'SUA_ANON_KEY',
+  SUPABASE_URL: 'https://vlgptjyukhdvhgipilwi.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_VRvE2fdP-t1VI4uzfZB-Mw_svTCuGGW',
   MIN_LOAD_MS: 1500,
   IMAGES: [],                       // URLs de imagens para pré-carregar
   AUDIO: { bgm: '', click: '', hit: '', miss: '', tap: '', win: '' } // URLs opcionais; vazio = som sintetizado
