@@ -9,21 +9,21 @@ const hand = (L, a) => { const k = L.dh / 100; return [L.dx + (12 + Math.sin(a) 
 
 Hub.defineGame('davi', {
   setup(g) {
-    g.hud('Pontos 0', Hub.hearts(CFG.lives));
-    return { lives: CFG.lives, score: 0, hits: 0, pos: 0, dir: 1, speed: CFG.speed0, zone: CFG.zone0, hp: 1, fallT: 0, hitT: 0, flash: 0, shots: [], msg: '', msgT: 0, parts: [], spin: 0, throwT: -1 };
+    const ml = CFG.lives + Hub.lvl('fe'); g.hud('Pontos 0', Hub.hearts(ml));
+    return { lives: ml, maxLives: ml, score: 0, hits: 0, pos: 0, dir: 1, speed: CFG.speed0 * (1 - 0.07 * Hub.lvl('coragem')), zone: CFG.zone0, hp: 1, fallT: 0, hitT: 0, flash: 0, shots: [], msg: '', msgT: 0, parts: [], spin: 0, throwT: -1 };
   },
   press(s, p, g) {
     const hit = Math.abs(s.pos - 0.5) <= s.zone / 2; let kill = false;
     g.sfx('whoosh'); s.throwT = 0;                                                      // Davi gira a funda e arremessa
     if (hit) {
-      s.score += CFG.pts; s.hits++; s.speed *= CFG.speedMul; s.zone = Math.max(CFG.zoneMin, s.zone * CFG.zoneMul); s.msg = 'Perfect!'; s.msgT = 0.7;
-      if (!s.fallT) { s.hp -= 0.2; if (s.hp <= 0.01) { s.hp = 0; s.fallT = 1; s.score += 20; s.msg = 'Golias caiu! +20'; kill = true; } }
+      s.score += CFG.pts; s.hits++; g.coin(2, g.W / 2, g.H * 0.45); s.speed *= CFG.speedMul; s.zone = Math.max(Hub.has('pedra') ? 0.09 : CFG.zoneMin, s.zone * CFG.zoneMul); s.msg = 'Perfect!'; s.msgT = 0.7;
+      if (!s.fallT) { s.hp -= 0.2; if (s.hp <= 0.01) { s.hp = 0; s.fallT = 1; s.score += 20; s.msg = 'Golias caiu! +20'; kill = true; g.coin(10, g.W / 2, g.H * 0.35); } }
     } else {
       g.sfx('miss'); g.shake(); s.lives--; s.flash = 0.4; s.msg = 'Errou!'; s.msgT = 0.6;
       if (s.lives <= 0) g.end(s.score, `${s.hits} pedradas certeiras`);
     }
     s.shots.push({ t: 0, hit, kill, done: false });
-    g.hud(`Pontos ${s.score}`, Hub.hearts(s.lives, CFG.lives));
+    g.hud(`Pontos ${s.score}`, Hub.hearts(s.lives, s.maxLives));
   },
   update(s, dt, g) {
     const L = lay(g);

@@ -6,7 +6,10 @@ characters/ -> (crie a pasta) arte de personagens personalizados:
    nome-corpo.png  corpo inteiro, fundo transparente -> palco da seleção e dentro dos jogos (ganha pulo, balanço e inclinação por código)
    Depois ajuste a linha da pessoa no elenco (AVATARS) do main.js, incluindo img: 'assets/characters/nome.png' e art: 'assets/characters/nome-corpo.png'.
 
-   Sem imagens, o personagem é desenhado em código a partir do "look" (pele, cabelo, barba, óculos, roupa) na mesma linha do elenco.
+   Sem imagens, o personagem é desenhado em código a partir do "look" na mesma linha do elenco. Opções do look:
+   build:'f' (corpo de vestido), skin, hair, eyes, lips, head: hair|long|braid|pony|bun|curly|bald|turban|helmet, beard: true|'long', glasses, shades,
+   crown, headband, veil (cor do véu), tunic, trim, sash, cloak, stripes, armor, long, sleeve:'long', prop: staff|spear|trowel|sling|net|sword|scroll|torch|tambourine|wheat.
+   Roupas e acessórios comprados na loja valem só para personagens desenhados em código (não para PNG).
    Douglas e Thais estão com visual PROVISÓRIO: ajuste o look quando enviar as fotos.
 
 music/      -> (opcional) músicas próprias. Em main.js, CONFIG.AUDIO.music = { menu: 'assets/music/menu.mp3', corrida: '...', muros: '...', pesca: '...', davi: '...', sansao: '...' }

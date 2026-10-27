@@ -74,7 +74,7 @@
     <img class="logo-sm" src="assets/logo.png" alt="PG Jovem desde 2018">
     <header class="profile">
       <img id="menu-avatar" class="avatar" alt="">
-      <div class="who"><small>Paz do Senhor,</small><strong id="menu-nick"></strong></div>
+      <div class="who"><small>Paz do Senhor,</small><strong id="menu-nick"></strong><span class="chip"><span class="coin"></span><b id="menu-coins">0</b> PG Coins</span></div>
       <button class="icon-btn" data-press="changeAvatar" aria-label="Trocar personagem"><svg><use href="#i-user"/></svg></button>
       <button class="icon-btn" id="btn-mute" data-press="mute" aria-label="Som"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="w" d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l6 6M22 9l-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
       <button class="icon-btn" data-press="logout" aria-label="Sair da conta"><svg><use href="#i-exit"/></svg></button>
@@ -86,7 +86,8 @@
       <button class="card" style="--i:2" data-press="play" data-game="pesca"><img class="thumb" alt=""><span class="t">Pescadores de Homens</span><small>Pedro · Mt 4</small></button>
       <button class="card" style="--i:3" data-press="play" data-game="davi"><img class="thumb" alt=""><span class="t">Funda de Davi</span><small>Davi · 1 Sm 17</small></button>
       <button class="card" style="--i:4" data-press="play" data-game="sansao"><img class="thumb" alt=""><span class="t">Força de Sansão</span><small>Sansão · Jz 16</small></button>
-      <button class="card wide" style="--i:5" data-press="ranking"><svg class="crown"><use href="#i-crown"/></svg><span><span class="t">Ranking</span><small>Os melhores do Reino</small></span></button>
+      <button class="card wide" style="--i:5" data-press="shop"><span class="coin big"></span><span><span class="t">Loja</span><small>Gaste seus PG Coins em atributos, roupas e melhorias</small></span></button>
+      <button class="card wide" style="--i:6" data-press="ranking"><svg class="crown"><use href="#i-crown"/></svg><span><span class="t">Ranking</span><small>Os melhores do Reino</small></span></button>
     </div>
   </section>
 
@@ -105,10 +106,25 @@
     <button class="btn ghost" data-press="menu">Voltar</button>
   </section>
 
+  <!-- Loja -->
+  <section class="screen" id="screen-shop">
+    <h1>Loja</h1>
+    <div class="wallet"><img id="shop-me" alt=""><span class="coin big"></span><b id="shop-coins">0</b><small>PG Coins</small></div>
+    <div class="tabs" id="shop-tabs">
+      <button class="tab on" data-press="shopTab" data-tab="attr">Atributos</button>
+      <button class="tab" data-press="shopTab" data-tab="outfit">Roupas</button>
+      <button class="tab" data-press="shopTab" data-tab="boost">Melhorias</button>
+    </div>
+    <p id="shop-msg" class="error" role="alert"></p>
+    <ul id="shop-list" class="shop-list"></ul>
+    <button class="btn ghost" data-press="menu">Voltar</button>
+  </section>
+
   <!-- Jogo (compartilhado pelos 5 mini-games) -->
   <section class="screen" id="screen-game">
     <header class="hud">
       <button class="icon-btn" data-press="exit" aria-label="Voltar ao menu">←</button>
+      <span id="hud-coins" class="chip"><span class="coin"></span><b>0</b></span>
       <span id="hud-left"></span>
       <span id="hud-right"></span>
     </header>
@@ -119,6 +135,7 @@
       <p class="big" id="final-score">0</p>
       <p id="final-detail"></p>
       <p id="final-verse" class="final-verse"></p>
+      <p id="final-coins" class="final-coins"></p>
       <p id="save-status"></p>
       <button class="btn" data-press="again">Jogar de novo</button>
       <button class="btn ghost" data-press="exit">Menu</button>

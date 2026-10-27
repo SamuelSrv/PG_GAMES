@@ -3,18 +3,19 @@
 'use strict';
 const CFG = { gravity: 1400, jump: -460, pw: 56, r: 16, rollValue: 5 };
 const { PINK, GOLD } = Art;
+const hudR = s => `Rolos ${s.rolls}` + (s.shield ? ` · Escudo ${s.shield}` : '');
 
 Hub.defineGame('corrida', {
   endDelay: 900,
-  setup(g) { g.hud('Pontos 0', 'Rolos 0'); return { y: g.H / 2, vy: 0, started: false, score: 0, rolls: 0, obs: [], spawn: 0, t: 0, parts: [], spin: 0, trail: 0 }; },
+  setup(g) { const s = { y: g.H / 2, vy: 0, started: false, score: 0, rolls: 0, obs: [], spawn: 0, t: 0, parts: [], spin: 0, trail: 0, shield: Hub.lvl('fe'), inv: 0, passN: 0 }; g.hud('Pontos 0', hudR(s)); return s; },
   press(s, p, g) { s.started = true; s.vy = CFG.jump; g.sfx('tap'); Art.burst(s.parts, g.W * 0.25, s.y + 26, 8, PINK, 120, 0.4, 300); },
   update(s, dt, g) {
     const { W, H } = g, cx = W * 0.25;
     Art.fxStep(s.parts, dt);
     if (s.over) { s.spin += dt * 7; s.vy += CFG.gravity * dt; s.y = Math.min(s.y + s.vy * dt, H - CFG.r); return; }
     if (!s.started) { s.y = H / 2 + Math.sin(performance.now() / 250) * 8; return; }
-    s.vy += CFG.gravity * dt; s.y += s.vy * dt; s.t += dt;
-    const speed = Math.min(380, 190 + s.score * 3);
+    s.vy += CFG.gravity * (Hub.has('asas') ? 0.86 : 1) * dt; s.y += s.vy * dt; s.t += dt;
+    const speed = Math.min(380, 190 + s.score * 3) * (1 - 0.07 * Hub.lvl('coragem'));
     s.trail -= dt; if (s.trail <= 0) { s.trail = 0.03; s.parts.push({ x: cx - 12, y: s.y + 8, vx: -120, vy: 0, g: 0, life: 0.35, max: 0.35, col: PINK, r: 3 }); }   // rastro neon
     s.spawn -= dt;
     if (s.spawn <= 0) {                                       // novo par de ídolos
@@ -25,11 +26,13 @@ Hub.defineGame('corrida', {
     s.obs.forEach(o => {
       o.x -= speed * dt;
       if (Math.abs(cx - o.x) < CFG.pw / 2 + CFG.r * 0.8 && Math.abs(s.y - o.gapY) > o.gap / 2 - CFG.r * 0.8) dead = true;
-      if (o.roll && Math.hypot(cx - o.x, s.y - o.gapY) < 34) { o.roll = false; s.rolls++; s.score += CFG.rollValue; g.sfx('hit'); Art.burst(s.parts, o.x, o.gapY, 16, GOLD, 220, 0.6, 200); }
-      if (!o.passed && o.x + CFG.pw / 2 < cx) { o.passed = true; s.score++; }
+      if (o.roll && Math.hypot(cx - o.x, s.y - o.gapY) < 34) { o.roll = false; s.rolls++; s.score += CFG.rollValue; g.sfx('hit'); g.coin(2, o.x, o.gapY - 20); Art.burst(s.parts, o.x, o.gapY, 16, GOLD, 220, 0.6, 200); }
+      if (!o.passed && o.x + CFG.pw / 2 < cx) { o.passed = true; s.score++; if (++s.passN % 5 === 0) g.coin(1, cx, s.y - 40); }
     });
     s.obs = s.obs.filter(o => o.x > -CFG.pw);
-    g.hud(`Pontos ${s.score}`, `Rolos ${s.rolls}`);
+    if (s.inv > 0) { s.inv -= dt; if (dead) { s.y = Math.max(CFG.r, Math.min(H - CFG.r, s.y)); s.vy = Math.min(s.vy, 0); } dead = false; }
+    else if (dead && s.shield > 0) { s.shield--; s.inv = 1.3; dead = false; s.vy = CFG.jump; g.sfx('hit'); Art.burst(s.parts, cx, s.y, 18, GOLD, 240, 0.6); }   // o escudo da Fé protege uma vez
+    g.hud(`Pontos ${s.score}`, hudR(s));
     if (dead) { g.sfx('miss'); g.shake(); Art.burst(s.parts, cx, s.y, 30, PINK, 320, 0.8); Art.burst(s.parts, cx, s.y, 12, GOLD, 240, 0.8); g.end(s.score, `${s.rolls} rolos da Palavra coletados`); }
   },
   draw(s, c, g) {
@@ -44,7 +47,7 @@ Hub.defineGame('corrida', {
     });
     Art.fxDraw(c, s.parts);
     c.save(); c.translate(cx, s.y); c.rotate(s.over ? s.spin : Math.max(-0.4, Math.min(0.5, s.vy / 900)));
-    Hub.player(c, { x: 0, y: 34, h: 70, pose: 'run', ph: s.t * 2.2 }); c.restore();
+    c.globalAlpha = s.inv > 0 && Math.floor(s.inv * 10) % 2 ? 0.4 : 1; Hub.player(c, { x: 0, y: 34, h: 70, pose: 'run', ph: s.t * 2.2 }); c.globalAlpha = 1; c.restore();
     if (!s.started) { c.fillStyle = '#fff'; c.shadowColor = PINK; c.shadowBlur = 14; c.textAlign = 'center'; c.font = '30px "Kaushan Script", cursive'; c.fillText('Toque para correr!', W / 2, H * 0.72); c.shadowBlur = 0; }
   }
 });

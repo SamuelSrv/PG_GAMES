@@ -6,18 +6,18 @@ const fill = Hub.$('#force-fill'), { PINK } = Art;
 
 Hub.defineGame('sansao', {
   endDelay: 1700,                                                                      // tempo para ver o templo desabar
-  setup(g) { g.hud('Pontos 0', `${CFG.duration.toFixed(1)}s`); fill.style.height = '0%'; return { started: false, time: CFG.duration, force: 0, score: 0, taps: 0, kick: 0, parts: [], cT: 0, dust: 0 }; },
+  setup(g) { const dur = CFG.duration + Hub.lvl('fe'); g.hud('Pontos 0', `${dur.toFixed(1)}s`); fill.style.height = '0%'; return { started: false, time: dur, force: 0, score: 0, taps: 0, kick: 0, parts: [], cT: 0, dust: 0 }; },
   press(s, p, g) {
     s.started = true;                                  // o cronômetro começa no primeiro toque
-    s.force = Math.min(100, s.force + CFG.gain);
+    s.force = Math.min(100, s.force + CFG.gain * (1 + 0.15 * Hub.lvl('coragem')));
     s.score += 1 + Math.floor(s.force / 34);           // bônus por manter a força alta
-    s.taps++; s.kick = 1; g.sfx('tap'); g.shake(); g.hud(`Pontos ${s.score}`, `${s.time.toFixed(1)}s`);
+    s.taps++; s.kick = 1; if (s.taps % 6 === 0) g.coin(1, g.W / 2, g.H * 0.5); g.sfx('tap'); g.shake(); g.hud(`Pontos ${s.score}`, `${s.time.toFixed(1)}s`);
     Art.burst(s.parts, g.W * 0.5 + (Math.random() - 0.5) * g.W * 0.7, g.H * 0.2, 4, '#b9a0c8', 60, 0.9, 200);   // poeira cai do teto
   },
   update(s, dt, g) {
     const { W, H } = g;
     if (s.started && !s.over) {
-      s.force = Math.max(0, s.force - CFG.drainPerSec * dt);   // esvazia 5% por segundo
+      s.force = Math.max(0, s.force - CFG.drainPerSec * (Hub.has('cinto') ? 0.6 : 1) * dt);   // esvazia 5% por segundo
       s.time = Math.max(0, s.time - dt); g.hud(`Pontos ${s.score}`, `${s.time.toFixed(1)}s`);
       if (s.time <= 0) { g.sfx('thud'); g.shake(); g.end(s.score, `${s.taps} toques`); }
     }

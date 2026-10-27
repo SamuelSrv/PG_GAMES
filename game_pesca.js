@@ -5,12 +5,12 @@ const CFG = { lives: 3, lostPerLife: 5 };
 const { GOLD } = Art, WATER = '#bfe6ff';
 
 Hub.defineGame('pesca', {
-  setup(g) { g.hud('Pontos 0', Hub.hearts(CFG.lives)); return { x: g.W / 2, tx: g.W / 2, lives: CFG.lives, score: 0, caught: 0, lost: 0, items: [], spawn: 0.5, t: 0, parts: [], ripples: [], castT: -1, tilt: 0, foam: 0 }; },
+  setup(g) { const ml = CFG.lives + Hub.lvl('fe'); g.hud('Pontos 0', Hub.hearts(ml)); return { x: g.W / 2, tx: g.W / 2, lives: ml, maxLives: ml, score: 0, caught: 0, lost: 0, items: [], spawn: 0.5, t: 0, parts: [], ripples: [], castT: -1, tilt: 0, foam: 0 }; },
   move(s, p) { s.tx = p.x; },                                  // arrastar o dedo / mover o mouse
   press(s, p) { s.tx = p.x; },
   key(s, code) { s.tx += code === 'ArrowLeft' ? -50 : code === 'ArrowRight' ? 50 : 0; },
   update(s, dt, g) {
-    const { W, H } = g, by = H * 0.86, half = Math.max(36, W * 0.11), wl = by + 20;     // wl = linha d'água
+    const { W, H } = g, by = H * 0.86, half = Math.max(36, W * 0.11) * (Hub.has('rede') ? 1.2 : 1), wl = by + 20;     // wl = linha d'água
     s.tx = Math.max(half, Math.min(W - half, s.tx)); const dx = s.tx - s.x; s.x += dx * Math.min(1, dt * 14);
     s.tilt = Math.max(-0.14, Math.min(0.14, Math.sin(s.t * 2.2) * 0.03 + dx * 0.002));   // o barco balança com as ondas e o movimento
     if (s.castT >= 0) { s.castT += dt / 0.35; if (s.castT > 1) s.castT = -1; }
@@ -20,12 +20,12 @@ Hub.defineGame('pesca', {
     s.t += dt; s.spawn -= dt;
     if (s.spawn <= 0) {
       s.spawn = Math.max(0.35, 0.9 - s.t * 0.01); const r = Math.random();
-      s.items.push({ type: r < 0.62 ? 'fish' : r < 0.72 ? 'gold' : r < 0.88 ? 'rock' : 'anchor', x: 30 + Math.random() * (W - 60), y: -30, vy: 150 + s.t * 4 + Math.random() * 60, ph: Math.random() * 6 });
+      s.items.push({ type: r < 0.62 ? 'fish' : r < 0.72 ? 'gold' : r < 0.88 ? 'rock' : 'anchor', x: 30 + Math.random() * (W - 60), y: -30, vy: (150 + s.t * 4 + Math.random() * 60) * (1 - 0.07 * Hub.lvl('coragem')), ph: Math.random() * 6 });
     }
     s.items = s.items.filter(it => {
       it.y += it.vy * dt; const isFish = it.type === 'fish' || it.type === 'gold';
       if (it.y > by - 22 && it.y < by + 22 && Math.abs(it.x - s.x) < half + 8) {      // pegou
-        if (isFish) { s.score += it.type === 'gold' ? 30 : 10; s.caught++; g.sfx('splash'); s.castT = 0; Art.burst(s.parts, it.x, by - 6, 14, WATER, 220, 0.6); if (it.type === 'gold') Art.burst(s.parts, it.x, by - 6, 12, GOLD, 200, 0.7, 150); }
+        if (isFish) { s.score += it.type === 'gold' ? 30 : 10; s.caught++; g.sfx('splash'); g.coin(it.type === 'gold' ? 4 : 1, it.x, by - 26); s.castT = 0; Art.burst(s.parts, it.x, by - 6, 14, WATER, 220, 0.6); if (it.type === 'gold') Art.burst(s.parts, it.x, by - 6, 12, GOLD, 200, 0.7, 150); }
         else { s.lives--; g.sfx('miss'); g.shake(); Art.burst(s.parts, it.x, by, 12, '#8a7a9a', 200, 0.5); }
         return false;
       }
@@ -36,11 +36,11 @@ Hub.defineGame('pesca', {
       }
       return true;
     });
-    g.hud(`Pontos ${s.score} · perdidos ${s.lost % CFG.lostPerLife}/${CFG.lostPerLife}`, Hub.hearts(s.lives, CFG.lives));
+    g.hud(`Pontos ${s.score} · perdidos ${s.lost % CFG.lostPerLife}/${CFG.lostPerLife}`, Hub.hearts(s.lives, s.maxLives));
     if (s.lives <= 0) g.end(s.score, `${s.caught} peixes pescados`);
   },
   draw(s, c, g) {
-    const { W, H } = g, by = H * 0.86, t = performance.now() / 1000, half = Math.max(36, W * 0.11), wl = by + 20;
+    const { W, H } = g, by = H * 0.86, t = performance.now() / 1000, half = Math.max(36, W * 0.11) * (Hub.has('rede') ? 1.2 : 1), wl = by + 20;
     Art.bg(c, W, H, 'pesca', t); Art.verse(c, W, H, 'pesca', 0.17);
     c.fillStyle = 'rgba(255,255,255,.7)'; for (let i = 0; i < 14; i++) { c.globalAlpha = 0.2 + 0.5 * Math.abs(Math.sin(t * 2 + i)); c.fillRect((i * 83) % W, H * 0.52 + (i * 41) % (H * 0.4), 2, 2); } c.globalAlpha = 1;   // brilhos na água
     const wave = (y, amp, sp, col) => { c.fillStyle = col; c.beginPath(); c.moveTo(0, H); for (let x = 0; x <= W; x += 10) c.lineTo(x, y + Math.sin(x / 34 + t * sp) * amp); c.lineTo(W, H); c.fill(); };
