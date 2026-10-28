@@ -1,0 +1,15 @@
+HUB DE MINI-GAMES · PG JOVEM (remake v4)
+
+COMO USAR
+1) Abra config.js e cole SUPABASE_URL e SUPABASE_ANON_KEY (suas chaves antigas ficavam no main.js).
+2) Rode o supabase.sql no SQL Editor (igual ao anterior; ranking continua compatível).
+3) Suba a pasta inteira (ou abra index.html). Funciona no navegador do celular.
+
+ONDE EDITAR (tudo em config.js)
+- Personagens: lista AVATARS (para a Thais e o Douglas, ajuste cabelo/roupa/cor).
+- Economia: ECON (div = pontos por moeda, cap = máximo por partida).
+- Loja: SHOP (preços, níveis, roupas, acessórios, auras, melhorias dos jogos).
+
+ARTE PRÓPRIA (opcional)
+- assets/characters/: coloque img (retrato) e art (corpo inteiro PNG) e referencie no AVATARS.
+- assets/intro.mp4: vídeo de abertura (opcional). Sons: CONFIG.AUDIO.
