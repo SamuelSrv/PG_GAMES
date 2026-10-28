@@ -43,7 +43,7 @@ window.HubData = (() => {
       look: { body: 'f', skin: '#dfae86', hair: '#7a4322', style: 'wavy', outfit: { kind: 'tunic', color: '#c2417a', trim: '#ffc94d', sash: '#ffc94d' } }
     },
     {
-      id: 19, name: 'Thiago', role: 'Baterista Mirim', bio: 'Já manda ver na baqueta. Baterista Mirim: já é melhor que o Wesley!', stats: [100, 100, 100],
+      id: 19, name: 'Thiago', role: 'Baterista Mirim', bio: 'Já manda ver na baqueta. Baterista Jr: já é melhor que o Wesley!', stats: [100, 100, 100],
       look: { body: 'm', build: 'kid', skin: '#d6a077', hair: '#2a1a10', style: 'short', outfit: { kind: 'tunic', color: '#2f6fb0', trim: '#ffffff', sash: '#ff2d95' }, prop: 'drumstick' }
     },
     {
