@@ -35,11 +35,11 @@ window.HubData = (() => {
      Arte própria (opcional): img (retrato quadrado) e art (corpo inteiro PNG) em assets/characters/. */
   const AVATARS = [
     {
-      id: 12, name: 'Douglas', role: 'Líder de jovens', bio: 'Líder do PG Jovem. Aqui entra uma frase sobre ele (edite no config.js).', stats: [100, 100, 100],
+      id: 12, name: 'Douglas', role: 'Líder de jovens', bio: 'Líder do PG Jovem e. Quem manda! (Depois da Thais e do Thiago).', stats: [100, 100, 100],
       look: { body: 'm', skin: '#d6a077', hair: '#2a1a10', style: 'short', outfit: { kind: 'tunic', color: '#2f6fb0', trim: '#ffffff', sash: '#ff2d95' } }
     },
     {
-      id: 13, name: 'Thais', role: 'Líder de jovens', bio: 'Líder do PG Jovem. Aqui entra uma frase sobre ela (edite no config.js).', stats: [100, 100, 100],
+      id: 13, name: 'Thais', role: 'Líder de jovens', bio: 'Líder do PG Jovem. Mae do Thiago e maior campea do torta na cara.', stats: [100, 100, 100],
       look: { body: 'f', skin: '#dfae86', hair: '#7a4322', style: 'wavy', outfit: { kind: 'tunic', color: '#c2417a', trim: '#ffc94d', sash: '#ffc94d' } }
     },
     {
