@@ -127,3 +127,7 @@ h3.sec{margin:12px 2px 6px;color:var(--pink2);font:400 1.15rem var(--brush)}
 .nl-badge {
     display: none !important;
 }
+
+#nl-badge-frame {
+    display: none !important;
+}
