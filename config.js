@@ -43,10 +43,6 @@ window.HubData = (() => {
       look: { body: 'f', skin: '#dfae86', hair: '#7a4322', style: 'wavy', outfit: { kind: 'tunic', color: '#c2417a', trim: '#ffc94d', sash: '#ffc94d' } }
     },
     {
-      id: 20, name: 'Bruna', role: 'Pregadora Master Blaster Supreme', bio: 'Pregadora master blaster supreme do PG e a menina das fotos: se tem momento especial, ela está com a câmera pronta (edite no config.js).', stats: [100, 100, 100],
-      look: { body: 'f', skin: '#e0b088', hair: '#3a1a12', style: 'wavy', acc: { camera: true }, outfit: { kind: 'tunic', color: '#17121f', trim: '#ff2d95', sash: '#ffc94d' }, prop: 'megaphone' }
-    },
-    {
       id: 19, name: 'Thiago', role: 'Baterista Mirim', bio: 'Já manda ver na baqueta. Baterista Mirim: já é melhor que o Wesley!', stats: [100, 100, 100],
       look: { body: 'm', build: 'kid', skin: '#d6a077', hair: '#2a1a10', style: 'short', outfit: { kind: 'tunic', color: '#2f6fb0', trim: '#ffffff', sash: '#ff2d95' }, prop: 'drumstick' }
     },
